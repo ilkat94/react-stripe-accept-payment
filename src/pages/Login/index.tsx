@@ -11,7 +11,7 @@ import FormButton from '../../components/FormButton';
 
 import { useAuth } from '../../hooks/useAuth';
 
-export interface Inputs {
+interface Inputs {
   email: string;
   password: string;
 }

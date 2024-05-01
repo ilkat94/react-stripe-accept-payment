@@ -3,7 +3,7 @@ import Label from '../Label';
 interface InputProps {
   label: string;
   id: string;
-  name: 'email' | 'fullName' | 'password' | 'password_confirmation';
+  name: 'email' | 'fullName' | 'password' | 'password_confirmation' | 'amount';
   type: string;
   register: any;
   autoComplete?: string;
