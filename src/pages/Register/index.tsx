@@ -53,39 +53,42 @@ export default function Register() {
     setLoading(true);
     setError('');
 
-    const response = await fetch('http://localhost:8000/api/register', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.email,
-        fullName: data.fullName,
-        password: data.password,
-        password_confirmation: data.password_confirmation,
-      }),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/api/register', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: data.email,
+          fullName: data.fullName,
+          password: data.password,
+          password_confirmation: data.password_confirmation,
+        }),
+      });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        throw new Error(`An error occurred: ${response.status}`);
+      }
+
       setLoading(false);
-      setError(`An error occurred: ${response.status}`);
-      return;
+      setSuccess('Account has been created successfully.');
+
+      setTimeout(() => {
+        setSuccess('');
+        navigate('/login');
+      }, 1500);
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
     }
-
-    setLoading(false);
-    setSuccess('Account has been created successfully.');
-
-    setTimeout(() => {
-      setSuccess('');
-      navigate('/login');
-    }, 1500);
   };
+
+  const clearError = () => setError('');
 
   if (user) {
     return <Navigate to="/" />;
   }
-
-  const clearError = () => setError('');
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

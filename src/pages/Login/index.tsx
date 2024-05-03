@@ -38,36 +38,38 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
 
-    const response = await fetch('http://localhost:8000/api/login', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    });
+    try {
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      const auth = await response.json();
 
       setLoading(false);
+      login({ ...auth });
+    } catch (error) {
+      setLoading(false);
       setError(error.message);
-      return;
     }
-
-    const auth = await response.json();
-
-    setLoading(false);
-    login({ ...auth });
   };
+
+  const clearError = () => setError('');
 
   if (user) {
     return <Navigate to="/" />;
   }
-
-  const clearError = () => setError('');
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
